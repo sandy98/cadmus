@@ -1,6 +1,6 @@
 #Cadmus
 
-![The Guardian](/img/guardianjh.jpg)
+![The Guardian](public/img/guardianjh.jpg)
 
 ###This is Cadmus Project, MVC Javascript micro-framework built on top of The Guardian's Ractive.js
 
