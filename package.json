@@ -1,0 +1,13 @@
+{
+  "name": "cadmus",
+  "version": "0.0.1-1",
+  "author": "Domingo Ernesto Savoretti",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/sandy98/cadmus.git"
+  },
+  "dependencies": {
+    "node-simple-router": "latest",
+    "showdown": "~0.3.1"
+  }
+}
