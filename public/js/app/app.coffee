@@ -1,22 +1,79 @@
-define ['jquery', 'director', 'Ractive'], (jQuery, Router, Ractive) ->
-  routes = 
-    '/': () -> alert 'Home'
-    '/contact': () -> alert 'Contact'
-    '/about': () -> alert 'About'
+dependencies = [
+  'jquery'
+  'director'
+  'Ractive'
+  'cs!app/views/Menu'
+  'cs!app/views/Footer'
+  'cs!app/views/About'
+]
+
+define dependencies, (jQuery, Router, Ractive, MenuView, FooterView, AboutView) ->
     
   class App
     version: "0.0.1"
+
+    noView: (msg) =>
+      @mainView = new Ractive
+        el: '#container'
+        template: "<p style='padding-top: 2em; max-height: 30em; min-height: 30em;'>{{msg}}</p>"
+        data: {msg: msg or "WTF?"}
+
+    showCurrent: =>
+      if @mainView
+        @mainView.teardown()
+      switch @currentRoute
+        when '/'
+          @noView 'Home view, under construction...'
+        when '/contact'
+          @noView 'Contact view, under construction...'
+        when '/about'
+          @mainView = new AboutView el: '#container', data: {}
+        else
+          @noView "Under construction..."
+
+    initRoutes: =>
+      @currentRoute = "/"
+      @routes = 
+        '/': => 
+          console.log 'Home'
+          @currentRoute = "/"
+          @showCurrent()
+        '/contact': => 
+          console.log 'Contact'
+          @currentRoute = "/contact"
+          @showCurrent()
+        '/about': => 
+          console.log 'About'
+          @currentRoute = "/about"
+          @showCurrent()
+      
+      @router = new Router(@routes).configure
+        notfound: () => 
+          console.log "404 - #{location.hash.substring(1)} not found"
+          if @currentRoute
+            console.log "Redirecting to: #{@currentRoute}"
+            location.href = location.href.replace(location.hash, "##{@currentRoute}")
+          else
+            location.href = location.href.replace(location.hash, "#/")
+      @router.init()
+
+      
     constructor:  ->
       @$ = jQuery
       console.log "App version: #{@version}"
       console.log "jQuery version: #{@$.fn.jquery}"
       console.log "Ractive version: #{Ractive.VERSION}"
-      	
-      @footerView = new Ractive
-        el: 'footer'
-        template: '<p style="color: navy; text-align: right;">© {{ author }} - {{ year }}</p>'
-        data: {author: "Domingo E. Savoretti", year: 2013}
 
-      @router = Router(routes)
-      @router.init()
-       
+      @menuView = new MenuView
+        el: '#menu-bar'
+        data: {}
+
+      @noView 'App loading...'
+
+      @footerView = new FooterView
+        el: 'footer'
+        data: {project: {name: 'Cadmus Project', author: "Domingo E. Savoretti", year: 2013}}
+
+      @initRoutes()
+
+    new App()

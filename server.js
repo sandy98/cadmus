@@ -39,13 +39,18 @@ router.get("/users/:id", function(req, res) {
 router.get("/readme", function(req, res) {
   res.writeHead(200, {'Content-type': 'text/html'});
   fs.readFile(__dirname + "/README.md", "utf8", function(err, md_data) {
-    res.write("<title>README.md</title>\n");
+     res.write("<style type='text/css'>body {padding-left: 10em;}</style>");
+     res.write("<title>README.md</title>\n");
      if (router.logging) {
        router.log(md_data);
      }
-    var converter = new Showdown.converter({extensions:['github', 'prettify']});
-    res.end(converter.makeHtml(md_data));
+     var converter = new Showdown.converter({extensions:['github', 'prettify']});
+     res.end(converter.makeHtml(md_data).replace('public/', ''));
   });
+});
+
+router.get("/fiddle", function(req, res) {
+  router.proxy_pass("http://jsfiddle.net/sandy98/BBkcs/show/", res);
 });
 
 /*
