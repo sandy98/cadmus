@@ -9,9 +9,9 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#/">Home</a></li>
-                <li><a href="#/about">About</a></li>
-                <li><a href="#/contact">Contact</a></li>
+                <li class="{{active === '/' ? 'active' : ''}}"><a href="#/">Home</a></li>
+                <li class="{{active === '/about' ? 'active' : ''}}"><a href="#/about">About</a></li>
+                <li class="{{active === '/contact' ? 'active' : ''}}"><a href="#/contact">Contact</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation<b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -25,14 +25,29 @@
                     </ul>
                 </li>
             </ul>
+            {{^user}}
             <form class="navbar-form navbar-right">
                 <div class="form-group">
-                    <input type="text" placeholder="Email" class="form-control">
+                    <input id="txt-email" type="text" placeholder="Email" class="form-control">
                 </div>
                 <div class="form-group">
-                    <input type="password" placeholder="Password" class="form-control">
+                    <input id="txt-pwd" type="password" placeholder="Password" class="form-control">
                 </div>
-                <button type="submit" class="btn btn-success">Sign in</button>
+                <button on-tap='dologin' class="btn btn-success">Sign in</button>
             </form>
+            {{/user}}
+            {{#user}}
+            <form class="navbar-form navbar-right">
+              <div class="form-group">
+                <span style="color: #0088cc; font-weight: bold;">{{name}}</span>
+              </div>
+              <div class="form-group">
+                  <span>&nbsp;&nbsp;&nbsp;</span>
+              </div>
+              <div class="form-group">
+                  <button on-tap='dologout' class="btn btn-warning">Sign out</button>
+              </div>
+            </form>
+            {{/user}}
         </div><!--/.navbar-collapse -->
     </div>

@@ -4,10 +4,11 @@ dependencies = [
   'Ractive'
   'cs!app/views/Menu'
   'cs!app/views/Footer'
+  'cs!app/views/Home'
   'cs!app/views/About'
 ]
 
-define dependencies, (jQuery, Router, Ractive, MenuView, FooterView, AboutView) ->
+define dependencies, (jQuery, Router, Ractive, MenuView, FooterView, HomeView, AboutView) ->
     
   class App
     version: "0.0.1"
@@ -23,13 +24,14 @@ define dependencies, (jQuery, Router, Ractive, MenuView, FooterView, AboutView) 
         @mainView.teardown()
       switch @currentRoute
         when '/'
-          @noView 'Home view, under construction...'
+          @mainView = new HomeView el: '#container', data: {}
         when '/contact'
           @noView 'Contact view, under construction...'
         when '/about'
           @mainView = new AboutView el: '#container', data: {}
         else
           @noView "Under construction..."
+      @menuView.set 'active', @currentRoute
 
     initRoutes: =>
       @currentRoute = "/"
@@ -54,19 +56,25 @@ define dependencies, (jQuery, Router, Ractive, MenuView, FooterView, AboutView) 
             console.log "Redirecting to: #{@currentRoute}"
             location.href = location.href.replace(location.hash, "##{@currentRoute}")
           else
-            location.href = location.href.replace(location.hash, "#/")
+            location.href = "/#/"
       @router.init()
 
       
     constructor:  ->
       @$ = jQuery
-      console.log "App version: #{@version}"
-      console.log "jQuery version: #{@$.fn.jquery}"
-      console.log "Ractive version: #{Ractive.VERSION}"
+      #console.log "App version: #{@version}"
+      #console.log "jQuery version: #{@$.fn.jquery}"
+      #console.log "Ractive version: #{Ractive.VERSION}"
 
       @menuView = new MenuView
         el: '#menu-bar'
-        data: {}
+        data: {user: null}
+      @menuView.on 'dologin', (evt) =>
+        console.log "Logging in..."
+        @menuView.set user: {name: $('#txt-email').val(), pwd: $('#txt-pwd').val()}
+      @menuView.on 'dologout', (evt) =>
+        console.log "Logging out..."
+        @menuView.set user: null
 
       @noView 'App loading...'
 
@@ -75,5 +83,12 @@ define dependencies, (jQuery, Router, Ractive, MenuView, FooterView, AboutView) 
         data: {project: {name: 'Cadmus Project', author: "Domingo E. Savoretti", year: 2013}}
 
       @initRoutes()
+
+      if not @currentRoute
+        console.log "No current route, so going home..."
+        @currentRoute = "/"
+      
+      location.href = "/##{@currentRoute}"
+
 
     new App()
