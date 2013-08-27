@@ -68,7 +68,7 @@ define dependencies, (jQuery, Router, Ractive, MenuView, FooterView, HomeView, A
 
       @menuView = new MenuView
         el: '#menu-bar'
-        data: {user: null}
+        data: {user: null, menuItems: [{href: '/', text: 'Home'}, {href: '/about', text: 'About'}, {href: '/contact', text: 'Contact'}]}
       @menuView.on 'dologin', (evt) =>
         console.log "Logging in..."
         @menuView.set user: {name: $('#txt-email').val(), pwd: $('#txt-pwd').val()}

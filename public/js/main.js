@@ -1,4 +1,3 @@
-//console.log("main.js");
 
 require.config({
   paths: {
@@ -21,7 +20,7 @@ require.config({
       deps: ['jquery']
     },
     'bootbox': {
-      deps: ['jquery', 'bootstrap']
+      deps: ['bootstrap']
     },
     'director': {
       exports: 'Router'
