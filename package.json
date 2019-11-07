@@ -8,6 +8,6 @@
   },
   "dependencies": {
     "node-simple-router": "latest",
-    "showdown": "~0.3.1"
+    "showdown": "~1.9.1"
   }
 }
